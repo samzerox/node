@@ -1,6 +1,14 @@
 const express = require('express');
 const app = express();
 
+const routes = require('./src/routes/index');
+const colors = require('colors/safe');
+const config = require('./src/config/config');
+const puerto = config.port || 3000;
+
+const bodyParser = require('body-parser');
+
+
 var hbs = require('hbs');
 require('./hbs/helpers');
 
@@ -12,18 +20,26 @@ hbs.registerPartials(__dirname + '/views/parciales', function(err) {});
 app.set('view engine', 'hbs');
 
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 
-app.get('/', function(req, res) {
 
-    res.render('home', {
-        nombre: 'sAmUeL aLcArAz'
-    });
+// Enable CORS
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
 });
-app.get('/about', function(req, res) {
 
-    res.render('about');
-});
 
-app.listen(3000, () => {
-    console.log('Escuchando en el puerto 3000');
+// configuración global de rutas
+app.use(routes);
+
+
+app.listen(puerto, () => {
+    console.log(colors.green('====================================='));
+    console.log('Corriendo en el puerto: ', colors.green(puerto));
+    console.log(colors.green('====================================='));
 });
