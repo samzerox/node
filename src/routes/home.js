@@ -1,8 +1,10 @@
 const express = require('express');
 const app = express();
 
+const { verificaTocket } = require('../middlewares/autenticacion');
 
-app.get('/', function(req, res) {
+
+app.get('/', verificaTocket, (req, res) => {
 
     res.render('home', {
         nombre: 'sAmUeL aLcArAz'
