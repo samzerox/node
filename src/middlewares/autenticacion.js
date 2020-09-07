@@ -1,6 +1,6 @@
 let verificaTocket = (req, res, next) => {
     // let token = req.get('token');
-    let token = 'tiene-token';
+    let token = '';
 
 
     // res.json({
