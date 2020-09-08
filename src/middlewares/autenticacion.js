@@ -1,24 +1,29 @@
-let verificaTocket = (req, res, next) => {
+const jwt = require('jsonwebtoken');
+const config = require('../config/config');
+
+let verificaToken = (req, res, next) => {
     // let token = req.get('token');
-    let token = '';
+    let token = req.headers['cookie'];
 
 
-    // res.json({
-    //     token: token
-    // });
-    if (token == '') {
-        res.redirect('/login');
-    } else {
+    console.log('token', token);
+
+    jwt.verify(token, config.SEED, (err, decoded) => {
+        if (err) {
+            return res.redirect('/login');
+
+        }
+
+        req.id = decoded.id;
+        req.usuario = decoded.usuario;
         next();
-    }
+
+    });
+
 };
 
 
 
-
-
-
-
 module.exports = {
-    verificaTocket
-}
+    verificaToken
+};

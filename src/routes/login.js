@@ -3,6 +3,8 @@ const app = express();
 const sql = require('mssql');
 const config = require('../config/config');
 
+var jwt = require('jsonwebtoken');
+
 
 app.get('/login', function(req, res) {
 
@@ -22,10 +24,31 @@ app.post('/login', async(req, res) => {
             .input('usu_clave', sql.NVarChar, body.password)
             .query('select * from dbo.cat_usuario where usu_correo = @usu_correo AND usu_clave = @usu_clave');
 
-        res.json({
-            data: result1.recordset,
-            registros: result1.rowsAffected
-        });
+        if (result1.rowsAffected[0] == 0) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'Usuario o Contraseña incorrectos'
+                }
+            });
+        }
+
+        let token = jwt.sign({
+            id: result1.recordset[0].usu_id,
+            usuario: result1.recordset[0].usu_correo
+        }, config.SEED, { expiresIn: config.CADUCIDAD_TOKEN });
+
+
+        res.cookie("token", token);
+        console.log(token);
+        res.redirect('/');
+
+        // res.json({
+        //     id: result1.recordset[0].usu_id,
+        //     usuario: result1.recordset[0].usu_correo,
+        //     registros: result1.rowsAffected[0],
+        //     token
+        // });
     } catch (err) {
         // ... error checks
         console.log(err);

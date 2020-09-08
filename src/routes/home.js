@@ -1,10 +1,15 @@
 const express = require('express');
 const app = express();
 
-const { verificaTocket } = require('../middlewares/autenticacion');
+const { verificaToken } = require('../middlewares/autenticacion');
 
 
-app.get('/', verificaTocket, (req, res) => {
+app.get('/', verificaToken, (req, res) => {
+
+    // return res.json({
+    //     id: req.id,
+    //     usuario: req.usuario
+    // });
 
     res.render('home', {
         nombre: 'sAmUeL aLcArAz'

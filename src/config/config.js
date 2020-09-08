@@ -2,6 +2,8 @@ require('dotenv').config();
 
 const {
     PORT,
+    CADUCIDAD_TOKEN,
+    SEED,
     DS_SQL_SERVER,
     DS_SQL_USER,
     DS_SQL_PASSWORD,
@@ -23,6 +25,8 @@ const config = {
     LOG_BASE_FOLDER_MAC,
     SSL_VALIDATION,
     port: PORT,
+    CADUCIDAD_TOKEN,
+    SEED,
     urlWsdl: WSDL_PEDIMENTO_COMPLETO,
     datasource: {
         server: DS_SQL_SERVER,
